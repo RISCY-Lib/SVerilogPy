@@ -22,7 +22,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sverilogpy"
-version = "0.0.0a0"
+version = "0.0.0a1"
 description = "A python System Verilog Parser and AST"
 readme = "README.md"
 authors = [{name = "Benjamin Davis", email = "allrisc.dev@gmail.com"}]

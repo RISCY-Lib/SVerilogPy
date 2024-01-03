@@ -8,8 +8,8 @@ on:
       - '*'
 
 jobs:
-  build:
-    name: Build Distro # Build the TARBALL distro
+  build_sdist:
+    name: Build SDist # Build the TARBALL distro
     runs-on: ubuntu-latest
 
     steps:
@@ -30,12 +30,36 @@ jobs:
           name: python-package-distributions
           path: dist/*.tar.gz
 
+  build_wheels:
+    name: Build Wheels for each platform
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pypa/cibuildwheel@v2.16
+        env:
+          CIBW_ARCHS_MACOS: auto universal2
+
+      - name: Verify clean directory
+        run: git diff --exit-code
+        shell: bash
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-package-distributions
+          path: wheelhousse/*.whl
+
   publish-to-pypi:
     name: Publish Python Distro to PyPI
 
     if: startsWith(github.ref, 'refs/tags/')  # Only publish on tags
 
-    needs: build
+    needs: [build_sdist, build_wheels]
     runs-on: ubuntu-latest
 
     environment:
