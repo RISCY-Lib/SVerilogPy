@@ -1,1 +1,24 @@
-.github .github/workflows .github/workflows/publish.yml .github/workflows/test.yml src src/sverilogpy src/sverilogpy/__init__.py src/sverilogpy/py.typed tests tests/test_creator.py tests/test_import.py .flake8 .gitignore compose-dev.yaml DEV_README.md dev-requirements.txt LICENSE makefile MANIFEST.in pyproject.toml README.md setup.py tox.ini
+# Developer README
+
+- [Developer README](#developer-readme)
+  - [Releasing](#releasing)
+
+
+## Releasing
+
+Releases are published automatically when a tag is pushed to GitHub.
+
+```bash
+  # Set next version number
+  export RELEASE=x.x.x
+
+  # Ensure committing everything (optional)
+  git add -A
+
+  # Create tags
+  git commit --allow-empty -m "Release $RELEASE"
+  git tag -a $RELEASE -m "Version $RELEASE"
+
+  # Push
+  git push --tags
+```
