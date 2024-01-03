@@ -22,16 +22,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sverilogpy"
-version = "1.0.1"
+version = "0.0.0a0"
 description = "A package to simplify the creation of Python Command-Line tools"
 readme = "README.md"
 authors = [{name = "Benjamin Davis", email = "allrisc.dev@gmail.com"}]
 license = {file = "LICENSE"}
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 2 - Pre-Alpha",
     "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -41,8 +40,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
 ]
-keywords = ["command", "tool"]
-requires-python = ">=3.7"
+keywords = ["Verilog", "tool", "SystemVerilog"]
+requires-python = ">=3.8"
 
 [project.urls]
 Homepage = "https://github.com/RISCY-Lib/sverilogpy"
