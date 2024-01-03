@@ -17,5 +17,14 @@
 #####################################################################################
 
 from setuptools import setup
+import glob
+from pybind11.setup_helpers import Pybind11Extension, build_ext
 
-setup()
+ext_modules = [
+  Pybind11Extension(
+    "sverilogpy_bind",
+    sorted(glob.glob("src/sverilogpy/*.cpp")),
+  )
+]
+
+setup(ext_modules=ext_modules, cmdclass={"build_ext": build_ext})

@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build Distro
+    name: Build Distro # Build the TARBALL distro
     runs-on: ubuntu-latest
 
     steps:
@@ -22,13 +22,13 @@ jobs:
         run: >-
           python -m pip install --upgrade pip
           && python -m pip install build --user
-      - name: Build binary wheel and source tarball
-        run: python -m build
+      - name: Build source tarball
+        run: python -m build --sdist
       - name: Store the distro packages
         uses: actions/upload-artifact@v3
         with:
           name: python-package-distributions
-          path: dist/
+          path: dist/*.tar.gz
 
   publish-to-pypi:
     name: Publish Python Distro to PyPI
