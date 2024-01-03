@@ -20,13 +20,14 @@ import sverilogpy_bind
 
 
 def test_sub():
-  assert(sverilogpy_bind.sub(1, 1) == 0)
-  assert(sverilogpy_bind.sub(2, 1) == 1)
-  assert(sverilogpy_bind.sub(2, 2) == 0)
-  assert(sverilogpy_bind.sub(2, 3) == -1)
+  assert (sverilogpy_bind.sub(1, 1) == 0)
+  assert (sverilogpy_bind.sub(2, 1) == 1)
+  assert (sverilogpy_bind.sub(2, 2) == 0)
+  assert (sverilogpy_bind.sub(2, 3) == -1)
+
 
 def test_add():
-  assert(sverilogpy_bind.add(1, 1) == 2)
-  assert(sverilogpy_bind.add(2, 1) == 3)
-  assert(sverilogpy_bind.add(2, 2) == 4)
-  assert(sverilogpy_bind.add(2, 3) == 5)
+  assert (sverilogpy_bind.add(1, 1) == 2)
+  assert (sverilogpy_bind.add(2, 1) == 3)
+  assert (sverilogpy_bind.add(2, 2) == 4)
+  assert (sverilogpy_bind.add(2, 3) == 5)
