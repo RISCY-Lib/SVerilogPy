@@ -17,7 +17,9 @@
 #####################################################################################
 
 import sverilogpy
+import sverilogpy_bind
 
 
 def test_import():
     print(sverilogpy.version_info)
+    print(sverilogpy_bind.__version__)

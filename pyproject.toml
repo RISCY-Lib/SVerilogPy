@@ -17,13 +17,13 @@
 #####################################################################################
 
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools", "wheel", "pybind11>=2.6.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "sverilogpy"
-version = "0.0.0a0"
-description = "A package to simplify the creation of Python Command-Line tools"
+version = "0.0.0a1"
+description = "A python System Verilog Parser and AST"
 readme = "README.md"
 authors = [{name = "Benjamin Davis", email = "allrisc.dev@gmail.com"}]
 license = {file = "LICENSE"}
