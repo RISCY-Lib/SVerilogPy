@@ -48,4 +48,4 @@ Homepage = "https://github.com/RISCY-Lib/sverilogpy"
 Documentation = "https://github.com/RISCY-Lib/sverilogpy/blob/main/README.md"
 
 [project.optional-dependencies]
-dev = ["flake8", "mypy", "tox", "pytest"]
+dev = ["flake8", "mypy", "tox", "pytest", "antlr4-tools"]
