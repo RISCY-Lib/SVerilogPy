@@ -20,10 +20,13 @@ from setuptools import setup
 import glob
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 
+__version__ = "0.0.0a2"
+
 ext_modules = [
   Pybind11Extension(
-    "sverilogpy_bind",
-    sorted(glob.glob("src/sverilogpy/*.cpp")),
+    "sverilogpy",
+    sorted(glob.glob("src/*.cpp")),
+    define_macros=[("VERSION_INFO", __version__)],
   )
 ]
 

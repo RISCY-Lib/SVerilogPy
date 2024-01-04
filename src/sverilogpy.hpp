@@ -21,13 +21,9 @@
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
-int add(int i, int j) {
-    return i + j;
-}
-
 namespace py = pybind11;
 
-PYBIND11_MODULE(sverilogpy_bind, m) {
+PYBIND11_MODULE(sverilogpy, m) {
     m.doc() = R"pbdoc(
         A python System Verilog Parser and AST
         -----------------------
@@ -37,21 +33,7 @@ PYBIND11_MODULE(sverilogpy_bind, m) {
         .. autosummary::
            :toctree: _generate
 
-           add
-           subtract
     )pbdoc";
-
-    m.def("add", &add, R"pbdoc(
-        Add two numbers
-
-        Some other explanation about the add function.
-    )pbdoc");
-
-    m.def("sub", [](int i, int j) { return i - j; }, R"pbdoc(
-        Subtract two numbers
-
-        Some other explanation about the subtract function.
-    )pbdoc");
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
