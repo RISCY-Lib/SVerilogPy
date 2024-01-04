@@ -20,7 +20,7 @@ from setuptools import setup
 import glob
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 
-__version__ = "0.0.0a2"
+__version__ = "1.0.0a2"
 
 ext_modules = [
   Pybind11Extension(
@@ -30,4 +30,9 @@ ext_modules = [
   )
 ]
 
-setup(ext_modules=ext_modules, cmdclass={"build_ext": build_ext})
+if __name__ == "__main__":
+  setup(
+    version=__version__,
+    ext_modules=ext_modules,
+    cmdclass={"build_ext": build_ext}
+  )

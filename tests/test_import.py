@@ -17,9 +17,16 @@
 #####################################################################################
 
 import sverilogpy
-import sverilogpy_bind
 
+import importlib.util
+import pathlib
+import sys
+
+_proj_root = pathlib.Path(__file__).parent.parent
+_setup_spec = importlib.util.spec_from_file_location("setup", _proj_root.joinpath("setup.py"))
+setup = importlib.util.module_from_spec(_setup_spec)
+sys.modules["setup"] = setup
+_setup_spec.loader.exec_module(setup)
 
 def test_import():
-    print(sverilogpy.version_info)
-    print(sverilogpy_bind.__version__)
+    assert sverilogpy.__version__ == setup.__version__
