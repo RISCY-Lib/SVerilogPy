@@ -18,6 +18,8 @@
 
 #include <pybind11/pybind11.h>
 
+#include "ast.hpp"
+
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
@@ -34,6 +36,9 @@ PYBIND11_MODULE(sverilogpy, m) {
            :toctree: _generate
 
     )pbdoc";
+
+    auto ast_m = m.def_submodule("ast", "AST submodule");
+    ast::init_ast(ast_m);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
