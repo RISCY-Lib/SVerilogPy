@@ -18,6 +18,11 @@
 
 lexer grammar SystemVerilogLexer;
 
+channels {
+    COMMENTS,
+    DIRECTIVES
+}
+
 //==================================================================================
 // Default Mode
 //==================================================================================
@@ -70,8 +75,8 @@ DESIGN              : 'design'              ;
 DISABLE             : 'disable'             ;
 DIST                : 'dist'                ;
 DO                  : 'do'                  ;
-DPI                 : '"DPI"' ;
-DPI_C               : '"DPI-C"' ;
+DPI                 : '"DPI"'               ;
+DPI_C               : '"DPI-C"'             ;
 EDGE                : 'edge'                ;
 ELSE                : 'else'                ;
 END                 : 'end'                 ;
@@ -124,7 +129,7 @@ IMPLIES             : 'implies'             ;
 IMPORT              : 'import'              ;
 INCDIR              : 'incdir'              ;
 DASH_INCDIR         : '-incdir'             ;
-INCLUDE             : 'include'             ;
+INCLUDE             : 'include'             -> pushMode(LIBRARY_MODE);
 INITIAL             : 'initial'             ;
 INOUT               : 'inout'               ;
 INPUT               : 'input'               ;
@@ -141,7 +146,7 @@ JOIN_NONE           : 'join_none'           ;
 LARGE               : 'large'               ;
 LET                 : 'let'                 ;
 LIBLIST             : 'liblist'             ;
-LIBRARY             : 'library'             ;
+LIBRARY             : 'library'             -> pushMode(LIBRARY_MODE);
 LOCAL               : 'local'               ;
 LOCALPARAM          : 'localparam'          ;
 LOGIC               : 'logic'               ;
@@ -163,6 +168,7 @@ NOT                 : 'not'                 ;
 NOTIF0              : 'notif0'              ;
 NOTIF1              : 'notif1'              ;
 NULL                : 'null'                ;
+OPTION              : 'option'              ;
 OR                  : 'or'                  ;
 OUTPUT              : 'output'              ;
 PACKAGE             : 'package'             ;
@@ -248,6 +254,7 @@ TRIAND              : 'triand'              ;
 TRIOR               : 'trior'               ;
 TRIREG              : 'trireg'              ;
 TYPE                : 'type'                ;
+TYPE_OPTION         : 'type_option'         ;
 TYPEDEF             : 'typedef'             ;
 UNION               : 'union'               ;
 UNIQUE              : 'unique'              ;
@@ -343,6 +350,8 @@ HASHEQHASH    : '#=#' ;
 COLONSLASH    : ':/'  ;
 STARCOLONSTAR : '*::*' ;
 
+APOSTROPHE   : '`'  ;
+
 COLONCOLON  : '::'  ;
 COLON       : ':'   ;
 SEMI        : ';'   ;
@@ -382,44 +391,64 @@ WIDTH_SYS_TASK      : '$width' ;
 NO_CHANGE_SYS_TASK  : '$nochange' ;
 
 // Heirachical Bases
-ROOT_DOT_SYS_TASK   : '$root.' ;
-UNIT_SYS_TASK       : '$unit' ;
+ROOT_SYS_OBJ   : '$root' ;
+UNIT_SYS_OBJ   : '$unit' ;
 
-// literals
+//==================================================================================
+// Useful Fragments
+//==================================================================================
+fragment ASCII_ANY                    : [\u0000-\u007f];
+fragment ASCII_NO_NEWLINE             : [\u0000-\u0008\u000b-\u000c\u000e-\u007f];
+fragment ASCII_PRINTABLE_EXCEPT_SPACE : [\u0021-\u007e];
+
+//==================================================================================
+// Literals
+//==================================================================================
 fragment SIGN : [+\-] ;
-fragment SIZE : NON_ZERO_UNSIGNED_NUMBER ;
 fragment NON_ZERO_DECIMAL_DIGIT : [1-9] ;
 fragment DECIMAL_DIGIT : [0-9] ;
 fragment NON_ZERO_UNSIGNED_NUMBER : NON_ZERO_DECIMAL_DIGIT ('_' | DECIMAL_DIGIT)* ;
-fragment UNSIGNED_NUMBER : DECIMAL_DIGIT ('_' | DECIMAL_DIGIT)* ;
 
-fragment DECIMAL_BASE : '\'' [sS]? [dD] ;
-DECIMAL_NUMBER : ( SIZE? DECIMAL_BASE )? UNSIGNED_NUMBER | SIZE? DECIMAL_BASE ([xX] | [zZ?]) '_'*;
+SIZE : NON_ZERO_UNSIGNED_NUMBER ;
+UNSIGNED_NUMBER : DECIMAL_DIGIT ('_' | DECIMAL_DIGIT)* ;
 
-BINARY_NUMBER : SIZE? '\'' [sS]? [bB] [xXzZ01?] ('_' | [xXzZ01?])* ;
-OCTAL_NUMBER : SIZE? '\'' [sS]? [bB] [xXzZ01234567?] ('_' | [xXzZ01234567?])* ;
-HEX_NUMBER : SIZE? '\'' [sS]? [bB] [xXzZ012345679aAbBcCdDeEfF?] ('_' | [xXzZ012345679aAbBcCdDeEfF?])* ;
+BINARY_BASE  : '\'' [sS]? [bB]  -> pushMode(BINARY_NUM_MODE)  ;
+DECIMAL_BASE : '\'' [sS]? [dD]  -> pushMode(DECIMAL_NUM_MODE) ;
+OCTAL_BASE   : '\'' [sS]? [oO]  -> pushMode(OCTAL_NUM_MODE)   ;
+HEX_BASE     : '\'' [sS]? [hH]  -> pushMode(HEX_NUM_MODE)     ;
 
+// Real Number processing
 fragment FIXED_POINT_NUMBER : UNSIGNED_NUMBER '.' UNSIGNED_NUMBER ;
 REAL_NUMBER : FIXED_POINT_NUMBER | UNSIGNED_NUMBER ('.' UNSIGNED_NUMBER)? [eE] SIGN? UNSIGNED_NUMBER ;
 
+// Unsized literals
 UNBASED_UNSIZED_LITERAL : '\'' [01xXzZ] ;
 
+// Strings
 fragment ESC_SEQ : '\\' . ;
 STRING_LITERAL : '"' ( ~["\\] | ESC_SEQ )* '"' ;
 
+// Time Units
 fragment TIME_UNIT : [munpf]? 's' ;
 TIME_LITERAL : ( UNSIGNED_NUMBER | FIXED_POINT_NUMBER ) TIME_UNIT ;
 
 
+//==================================================================================
 // Identifiers
-fragment ASCII_PRINTABLE_EXCEPT_SPACE : [\u0021-\u007e] ;
+//==================================================================================
 ESCAPED_IDENTIFIER : '\\' ASCII_PRINTABLE_EXCEPT_SPACE* WHITE_SPACE;
 SIMPLE_IDENTIFIER : [a-zA-Z_] [a-zA-Z0-9$_]* ;
 SYSTEM_TF_IDENTIFIER : '$' [a-zA-Z0-9$_]+ ;
 
+//==================================================================================
+// Comments
+//==================================================================================
+BLOCK_COMMENT  : '/*' ASCII_ANY*? '*/' -> channel(COMMENTS) ;
+INLINE_COMMENT : '//' ASCII_NO_NEWLINE* -> channel(COMMENTS) ;
 
+//==================================================================================
 // Misc
+//==================================================================================
 WHITE_SPACE : [ \t\r\n]+ -> channel(HIDDEN) ;
 ZERO_OR_ONE_Z_OR_X : [01][zZxX] ;
 
@@ -428,6 +457,31 @@ PATH_PULSE      : 'PATHPULSE$' ;
 OPTION_DOT      : 'option.' ;
 TYPE_OPTION_DOT : 'type_option.' ;
 SAMPLE          : 'sample' ;
+
+//==================================================================================
+// Binary number processing
+//==================================================================================
+mode BINARY_NUM_MODE;
+BINARY_VALUE : [xXzZ01?] ('_' | [xXzZ01?])* -> popMode ;
+
+//==================================================================================
+// Decimal number processing
+//==================================================================================
+mode DECIMAL_NUM_MODE;
+DECIMAL_VALUE     : UNSIGNED_NUMBER -> type(UNSIGNED_NUMBER), popMode;
+X_OR_Z_UNDERSCORE : [xXzZ?] '_'*    -> popMode;
+
+//==================================================================================
+// Octal Number processing
+//==================================================================================
+mode OCTAL_NUM_MODE;
+OCTAL_VALUE : [xXzZ0-7?] ('_' | [xXz0-7?])* -> popMode ;
+
+//==================================================================================
+// Hex Number processing
+//==================================================================================
+mode HEX_NUM_MODE;
+HEX_VALUE : [xXzZ0-9a-fA-F?] ('_' | [0-9a-fA-F?])* -> popMode ;
 
 //==================================================================================
 // UDP Table Mode
@@ -440,6 +494,9 @@ EDGE_SYMBOL : [rRfFpPnN*] ;
 
 UDP_END_TABLE : 'endtable' -> type(ENDTABLE), popMode ;
 
+//==================================================================================
+// Library Mode
+//==================================================================================
 mode LIBRARY_MODE;
 
 // File path Information

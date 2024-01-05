@@ -17,9 +17,9 @@
 #####################################################################################
 
 import sverilogpy.parser as parser
+import antlr4
 
 
 def test_module_parser():
   source = """module test(); endmodule """
-  print(parser.parseString(source))
-  assert False
+  assert isinstance(parser.parseString(source), antlr4.ParserRuleContext)
