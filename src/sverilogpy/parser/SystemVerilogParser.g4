@@ -66,24 +66,18 @@ description
 
 // Module Declarations
 module_header
-  : attribute_instance* module_keyword lifetime? identifier package_import_declaration* parameter_port_list?
-  ;
-
-module_nonansi_header
-  : module_header list_of_ports ';'
-  ;
-
-module_ansi_header
-  : module_header list_of_port_declarations? ';'
-  ;
+    : attribute_instance* module_keyword lifetime? identifier package_import_declaration* parameter_port_list? list_of_port_declarations? ';'
+    ;
 
 module_declaration
-  : module_nonansi_header timeunits_declaration? module_item* 'endmodule' ( ':' identifier )?
-  | module_ansi_header timeunits_declaration? non_port_module_item* 'endmodule' ( ':' identifier )?
-  | attribute_instance* module_keyword lifetime? identifier '(' '.*' ')' ';' timeunits_declaration? module_item* 'endmodule' ( ':' identifier )?
-  | 'extern' module_nonansi_header
-  | 'extern' module_ansi_header
-  ;
+    : module_header timeunits_declaration? module_item* 'endmodule' module_name?
+    | attribute_instance* module_keyword lifetime? identifier '(' '.*' ')' ';' timeunits_declaration? module_item* 'endmodule' module_name?
+    | 'extern' module_header
+    ;
+
+module_name
+    : ':' identifier
+    ;
 
 module_keyword
   : 'module'

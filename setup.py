@@ -17,22 +17,18 @@
 #####################################################################################
 
 from setuptools import setup
-import glob
-from pybind11.setup_helpers import Pybind11Extension, build_ext
 
-__version__ = "1.0.0a2"
+import importlib.util
+import pathlib
+import sys
 
-ext_modules = [
-  Pybind11Extension(
-    "sverilogpy",
-    sorted(glob.glob("src/*.cpp")),
-    define_macros=[("VERSION_INFO", __version__)],
-  )
-]
+_proj_root = pathlib.Path(__file__).parent
+_sverilogpy_spec = importlib.util.spec_from_file_location("sverilogpy", _proj_root.joinpath("src/sverilogpy/__init__.py"))
+sverilogpy = importlib.util.module_from_spec(_sverilogpy_spec)
+sys.modules["sverilogpy"] = sverilogpy
+_sverilogpy_spec.loader.exec_module(sverilogpy)
 
 if __name__ == "__main__":
   setup(
-    version=__version__,
-    ext_modules=ext_modules,
-    cmdclass={"build_ext": build_ext}
+    version=sverilogpy.__version__
   )

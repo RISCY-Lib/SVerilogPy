@@ -16,6 +16,41 @@
 # License along with this library; If not, see <https://www.gnu.org/licenses/>.
 #####################################################################################
 
-import sverilogpy
-def test_import():
-    assert isinstance(sverilogpy.__version__, str)
+from __future__ import annotations
+
+import attr
+import enum
+
+
+class LifetimeEnum(enum.Enum):
+  STATIC = enum.auto()
+  AUTOMATIC = enum.auto()
+  DEFAULT = enum.auto()
+
+
+@attr.define(auto_attribs=True, kw_only=True)
+class ASTNode:
+  """The base class for all SV AST Nodes"""
+
+  parent: ASTNode | None = None
+  """The parent of this node"""
+  attributes: list[AttributeInstance] = attr.field(factory=list)
+  """The attributes of this node"""
+
+
+@attr.define(auto_attribs=True)
+class AttributeInstance(ASTNode):
+  """The base class for all SV Attribute Instances"""
+
+  specs: list[AttributeSpec] = attr.field(factory=list)
+  """The specifications of this attribute"""
+
+
+@attr.define(auto_attribs=True)
+class AttributeSpec(ASTNode):
+  """The base class for all SV Attribute Specifications"""
+
+  name: str
+  """The name of this attribute"""
+  value: str
+  """The value of this attribute"""

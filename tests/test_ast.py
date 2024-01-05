@@ -29,8 +29,8 @@ def test_attributespec():
   spec = ast.AttributeSpec("name", "value")
 
   assert isinstance(spec, ast.AttributeSpec)
-  assert spec.getName() == "name"
-  assert spec.getValue() == "value"
+  assert spec.name == "name"
+  assert spec.value == "value"
 
 
 def test_attributeinstance():
@@ -38,12 +38,12 @@ def test_attributeinstance():
   spec = ast.AttributeSpec("name", "value")
 
   assert isinstance(attr, ast.AttributeInstance)
-  assert attr.getParent() is None
-  assert attr.setParent(attr) is None
-  assert attr.getParent() is attr
-  assert attr.addSpec(spec) is None
-  assert attr.getSpecs() == [spec]
-  assert len(attr.getSpecs()) == 1
+  assert attr.parent is None
+  assert attr.attributes == []
+  assert attr.specs == []
+
+  attr.specs.append(spec)
+  assert attr.specs == [spec]
 
 
 def test_astnode():
@@ -51,9 +51,11 @@ def test_astnode():
   inst = ast.AttributeInstance()
 
   assert isinstance(node, ast.ASTNode)
-  assert node.getParent() is None
-  assert node.setParent(node) is None
-  assert node.getParent() is node
-  assert node.getAttributes() == []
-  assert node.addAttribute(inst) is None
-  assert node.getAttributes()
+  assert node.parent is None
+  assert node.attributes == []
+
+  node.parent = node
+  assert node.parent is node
+
+  node.attributes.append(inst)
+  assert node.attributes == [inst]

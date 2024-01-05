@@ -16,6 +16,10 @@
 # License along with this library; If not, see <https://www.gnu.org/licenses/>.
 #####################################################################################
 
-import sverilogpy
-def test_import():
-    assert isinstance(sverilogpy.__version__, str)
+import sverilogpy.parser as parser
+
+
+def test_module_parser():
+  source = """module test(); endmodule """
+  print(parser.parseString(source))
+  assert False

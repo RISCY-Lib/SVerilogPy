@@ -1,3 +1,4 @@
 [flake8]
 max-line-length = 100
 indent-size = 2
+exclude = src/sverilogpy/parser/SystemVerilogLexer.py,src/sverilogpy/parser/SystemVerilogParser.py,src/sverilogpy/parser/SystemVerilogParserListener.py,src/sverilogpy/parser/SystemVerilogParserVisitor.py,src/sverilogpy/parser/SystemVerilogParserBaseListener.py,src/sverilogpy/parser/SystemVerilogParserBaseVisitor.py,src/sverilogpy/parser/SystemVerilogParser.tokens,src/sverilogpy/parser/SystemVerilogLexer.tokens,src/sverilogpy/parser/SystemVerilogLexer.py,src/sverilogpy/parser/SystemVerilogParser.py,src/sverilogpy/parser/SystemVerilogParserListener.py,src/sverilogpy/parser/SystemVerilogParserVisitor.py,src/sverilogpy/parser/SystemVerilogParserBaseListener.py,src/sverilogpy/parser/SystemVerilogParserBaseVisitor.py

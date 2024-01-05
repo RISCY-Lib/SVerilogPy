@@ -16,30 +16,10 @@
 # License along with this library; If not, see <https://www.gnu.org/licenses/>.
 #####################################################################################
 
-from __future__ import annotations
+all: SystemVerilogLexer.py SystemVerilogParser.py
 
-import enum
+SystemVerilogParser.py: SystemVerilogParser.g4 SystemVerilogLexer.g4
+	antlr4 -Dlanguage=Python3 -visitor -o . $<
 
-
-class LifetimeEnum(enum.Enum):
-  STATIC = enum.auto()
-  AUTOMATIC = enum.auto()
-  DEFAULT = enum.auto()
-
-
-class ASTNode:
-  def getParent(self) -> ASTNode: ...
-  def setParent(self, parent: ASTNode) -> None: ...
-  def addAttribute(self, attr: AttributeInstance) -> None: ...
-  def getAttributes(self) -> list[AttributeInstance]: ...
-
-
-class AttributeInstance(ASTNode):
-  def addSpec(self, spec: AttributeSpec) -> None: ...
-  def getSpecs(self) -> list[AttributeSpec]: ...
-
-
-class AttributeSpec(ASTNode):
-  def __init__(self, name: str, value: str): ...
-  def getName(self) -> str: ...
-  def getValue(self) -> str: ...
+SystemVerilogLexer.py: SystemVerilogLexer.g4
+	antlr4 -Dlanguage=Python3 -o . $<

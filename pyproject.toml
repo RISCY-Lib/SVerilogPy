@@ -17,7 +17,7 @@
 #####################################################################################
 
 [build-system]
-requires = ["setuptools", "wheel", "pybind11>=2.6.1"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -41,6 +41,8 @@ classifiers = [
     "Topic :: Utilities",
 ]
 keywords = ["Verilog", "tool", "SystemVerilog"]
+
+dependencies = ["antlr4-python3-runtime", "attrs"]
 requires-python = ">=3.8"
 
 [project.urls]
@@ -48,4 +50,4 @@ Homepage = "https://github.com/RISCY-Lib/sverilogpy"
 Documentation = "https://github.com/RISCY-Lib/sverilogpy/blob/main/README.md"
 
 [project.optional-dependencies]
-dev = ["flake8", "mypy", "tox", "pytest", "pybind11", "antlr4-tools", "setuptools"]
+dev = ["flake8", "mypy", "tox", "pytest", "antlr4-tools", "setuptools"]

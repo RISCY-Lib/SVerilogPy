@@ -411,10 +411,6 @@ STRING_LITERAL : '"' ( ~["\\] | ESC_SEQ )* '"' ;
 fragment TIME_UNIT : [munpf]? 's' ;
 TIME_LITERAL : ( UNSIGNED_NUMBER | FIXED_POINT_NUMBER ) TIME_UNIT ;
 
-// File path Information
-fragment PATH_STRING : STRING_LITERAL ;
-FILE_PATH_SPEC : ~[",; \t\r\n\\]+ | PATH_STRING ;
-
 
 // Identifiers
 fragment ASCII_PRINTABLE_EXCEPT_SPACE : [\u0021-\u007e] ;
@@ -443,3 +439,10 @@ EXTRA_LEVEL_SYMBOL : [?bB] ;
 EDGE_SYMBOL : [rRfFpPnN*] ;
 
 UDP_END_TABLE : 'endtable' -> type(ENDTABLE), popMode ;
+
+mode LIBRARY_MODE;
+
+// File path Information
+fragment ASCII_PRINTABLE          : [\u0020-\u007e];
+fragment ESC_ASCII_PRINTABLE      : '\\' ASCII_PRINTABLE;
+FILE_PATH_SPEC : ( [a-zA-Z0-9_./] | ESC_ASCII_PRINTABLE)+ | STRING_LITERAL ;
