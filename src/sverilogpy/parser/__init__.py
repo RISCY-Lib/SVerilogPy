@@ -24,6 +24,11 @@ from sverilogpy.parser.SystemVerilogParserListener import SystemVerilogParserLis
 import antlr4
 
 
+class InvalidEntryPointError(Exception):
+    """An exception raised when an invalid entry point is given to parseString"""
+    pass
+
+
 def parseFile(filename: str, entry: str = "source_text") -> antlr4.ParserRuleContext:
     """Parse a System Verilog source file into a SystemVerilogParser
 
@@ -46,5 +51,8 @@ def _parse(input_stream: antlr4.InputStream, entry: str) -> antlr4.ParserRuleCon
     lexer = SystemVerilogLexer(input_stream)
     stream = antlr4.CommonTokenStream(lexer)
     parser = SystemVerilogParser(stream)
-    parser_func = getattr(parser, entry)
+    try:
+        parser_func = getattr(parser, entry)
+    except AttributeError:
+        raise InvalidEntryPointError(f"Invalid entry point: {entry}")
     return parser_func()

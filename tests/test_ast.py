@@ -16,6 +16,8 @@
 # License along with this library; If not, see <https://www.gnu.org/licenses/>.
 #####################################################################################
 
+import pytest
+
 import sverilogpy.ast as ast
 
 
@@ -26,16 +28,16 @@ def test_lifetimeenum():
 
 
 def test_attributespec():
-  spec = ast.AttributeSpec("name", "value")
+  spec = ast.AttrSpec("name", "value")
 
-  assert isinstance(spec, ast.AttributeSpec)
+  assert isinstance(spec, ast.AttrSpec)
   assert spec.name == "name"
   assert spec.value == "value"
 
 
 def test_attributeinstance():
   attr = ast.AttributeInstance()
-  spec = ast.AttributeSpec("name", "value")
+  spec = ast.AttrSpec("name", "value")
 
   assert isinstance(attr, ast.AttributeInstance)
   assert attr.parent is None
@@ -45,17 +47,13 @@ def test_attributeinstance():
   attr.specs.append(spec)
   assert attr.specs == [spec]
 
+  attr.parent = attr
+  assert attr.parent is attr
+
+  attr.attributes.append(attr)
+  assert attr.attributes == [attr]
+
 
 def test_astnode():
-  node = ast.ASTNode()
-  inst = ast.AttributeInstance()
-
-  assert isinstance(node, ast.ASTNode)
-  assert node.parent is None
-  assert node.attributes == []
-
-  node.parent = node
-  assert node.parent is node
-
-  node.attributes.append(inst)
-  assert node.attributes == [inst]
+  with pytest.raises(TypeError):
+    node = ast.ASTNode()
